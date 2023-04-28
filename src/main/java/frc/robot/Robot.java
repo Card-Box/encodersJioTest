@@ -53,6 +53,7 @@ public class Robot extends TimedRobot {
   public double wheelCircumference = Math.PI * wheelDiameter;
 
   public int auto = 0;
+  public double drivingDistance = 0;
   
 /**
  * JL here! driveInDistance will use an encoder to drive a set distance,
@@ -86,7 +87,7 @@ public class Robot extends TimedRobot {
     
     motor1.setNeutralMode(NeutralMode.Brake);
 
-    SmartDashboard.putNumber("driveDistance", 0);
+    
 
     auto = 0;
   }
@@ -124,6 +125,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Distance (in)", encoderPos * 360 * wheelCircumference);
 
     SmartDashboard.putBoolean("Zero Toggle", zeroToggle);
+    SmartDashboard.putNumber("driveDistance", drivingDistance);
 
     if(SmartDashboard.getBoolean("Zero Toggle", false) == true){
       motor1.setSelectedSensorPosition(0);
