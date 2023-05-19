@@ -14,6 +14,8 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import java.lang.Math;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 
 
 /**
@@ -54,6 +56,12 @@ public class Robot extends TimedRobot {
 
   public int auto = 0;
   public double drivingDistance = 0;
+
+  double kP = 0;
+  double kI = 0;
+  double kD = 0;
+  public PIDController directionController = new PIDController(kP, kI, kD);
+  //public PIDOutput directionMotor;
   
 /**
  * JL here! driveInDistance will use an encoder to drive a set distance,
@@ -87,7 +95,9 @@ public class Robot extends TimedRobot {
     
     motor1.setNeutralMode(NeutralMode.Brake);
 
-    
+    directionController.enableContinuousInput(-180, 180);
+
+    SmartDashboard.putNumber("Magic Number", magicNumber);
 
     auto = 0;
   }
@@ -119,7 +129,7 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putNumber("Current error", error);
     SmartDashboard.putNumber("Current Proposed Power", error * magicNumber);
-    SmartDashboard.putNumber("Magic Number", magicNumber);
+    //SmartDashboard.putNumber("Magic Number", magicNumber);
     //magicNumber = SmartDashboard.getNumber("Magic Number", 0);
 
     SmartDashboard.putNumber("Distance (in)", encoderPos * 360 * wheelCircumference);
@@ -174,8 +184,11 @@ public class Robot extends TimedRobot {
         break;
       case kCaseToCase:
 
+      if(Math.abs(SmartDashboard.getNumber("Magic Number", magicNumber)) < 0.05){
+
         motor1.set(ControlMode.PercentOutput, error * SmartDashboard.getNumber("Magic Number", magicNumber));
 
+      }
       break;
       case kDefaultAuto:
       default:
